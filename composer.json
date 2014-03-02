@@ -1,14 +1,14 @@
 {
-    "name": "scribe/stripe-bundle",
-    "description": "Symfony bundle to handle interaction with stripe.com payment api",
-    "keywords": ["Symfony2", "Stripe", "Scribe"],
-    "type": "symfony-bundle",
-    "homepage": "https://github.com/scribenet/ScribeStripeBundle",
-    "license": "MIT",
+    "name"        : "scribe/stripe-bundle",
+    "description" : "Symfony bundle to handle interaction with stripe.com payment api",
+    "keywords"    : ["Symfony2","Stripe","Scribe"],
+    "type"        : "symfony-bundle",
+    "homepage"    : "https://github.com/scribenet/ScribeStripeBundle",
+    "license"     : "MIT",
     "authors": [{
-        "name" : "Rob Frawley 2nd",
-        "email" : "rfrawley@scribenet.com",
-        "homepage": "http://www.scribenet.com"
+        "name"     : "Rob Frawley 2nd",
+        "email"    : "rfrawley@scribenet.com",
+        "homepage" : "http://www.scribenet.com"
     }],
     "require": {
         "php"                      : ">=5.4",
