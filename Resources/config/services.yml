@@ -1,0 +1,7 @@
+parameters:
+    scribe.stripe.charge.class: Scribe\StripeBundle\Component\StripeCharge
+
+services:
+    scribe.stripe.charge:
+        class: %scribe.stripe.charge.class%
+        arguments: [ "@service_container" ]
