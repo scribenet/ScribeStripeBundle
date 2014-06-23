@@ -93,7 +93,7 @@ abstract class Stripe implements ContainerAwareInterface
 
     /**
      * @param  ContainerInterface $container
-     * @return Clockwork
+     * @return Stripe
      */
     public function setContainer(ContainerInterface $container = null)
     {
@@ -260,7 +260,7 @@ abstract class Stripe implements ContainerAwareInterface
     private function curlRequest($method, $type, array $data = array(), array $headers = array()) 
     {
         if (!extension_loaded('curl')) {
-            throw new ClockworkException('Clockwork requires the Curl PHP module is loaded');
+            throw new StripeException('Stripe requires the Curl PHP module is loaded');
         }
 
         $url = $this->buildApiBaseUrl($method);
