@@ -106,9 +106,15 @@ abstract class Stripe implements ContainerAwareInterface
      * @param  string $method
      * @return string
      */
-    private function buildApiBaseUrl($method)
+    private function buildApiBaseUrl($method, $get = null)
     {
-        return self::API_URL_PROTOCOL . '://' . self::API_URL_BASE . 'v1/' . $method;
+        $url = self::API_URL_PROTOCOL . '://' . self::API_URL_BASE . 'v1/' . $method;
+
+        if ($get !== null) {
+            $url = $url . '/' . $get;
+        }
+
+        return $url;
     }
 
     /**
@@ -225,7 +231,7 @@ abstract class Stripe implements ContainerAwareInterface
      * @param  array  $data
      * @return array
      */
-    protected function request($method, $type, array $data = array()) 
+    protected function request($method, $type, array $data = array(), $get = null) 
     {
         $user_agent = [
             'bindings_version' => self::BUNDLE_VERSION,
@@ -236,14 +242,14 @@ abstract class Stripe implements ContainerAwareInterface
         ];
 
         $headers = [
-            'X-Stripe-Client-User-Agent: '    . json_encode($user_agent),
+            'X-Stripe-Client-User-Agent: '              . json_encode($user_agent),
             'User-Agent: Stripe/v1 ScribeStripeBundle/' . self::BUNDLE_VERSION,
-            'Authorization: Bearer '          . $this->api_key,
-            'Stripe-Version: '                . self::API_VERSION
+            'Authorization: Bearer '                    . $this->api_key,
+            'Stripe-Version: '                          . self::API_VERSION
         ];
 
         list($response, $code)
-            = $this->curlRequest($method, $type, $data, $headers)
+            = $this->curlRequest($method, $type, $data, $get, $headers)
         ;
 
         return $this->interpretResponse($response, $code);
@@ -257,13 +263,13 @@ abstract class Stripe implements ContainerAwareInterface
      * @param  array  $headers
      * @return array
      */
-    private function curlRequest($method, $type, array $data = array(), array $headers = array()) 
+    private function curlRequest($method, $type, array $data = array(), $get = null, array $headers = array()) 
     {
         if (!extension_loaded('curl')) {
             throw new StripeException('Stripe requires the Curl PHP module is loaded');
         }
 
-        $url = $this->buildApiBaseUrl($method);
+        $url = $this->buildApiBaseUrl($method, $get);
 
         $handle = curl_init($url);
 

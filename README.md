@@ -42,6 +42,56 @@ scribe_stripe:
   log_activity: false
 ```
 
+## Usage
+
+Minimal usage:
+
+```
+$charge = new \Scribe\StripeBundle\Component\StripeCharge();
+
+try {
+	$charge
+		->setAmount('10.00')
+		->setCardNumber('4242424242424242')
+		->setCardExperation('01', '16')
+		->setCardCvc('000')
+		->run()
+	;
+} catch(\Scribe\StripeBundle\Exception\StripeException $e) {
+	// handle exception
+}
+
+$response = $charge->getResponse();
+```
+
+You can also use a collection of other fields (https://stripe.com/docs/api/php#create_charge) to pass additional data to Stripe.
+
+```
+$charge = new \Scribe\StripeBundle\StripeCharge();
+
+try {
+	$charge
+		->setAmount('10.00')
+		->setCardNumber('4242424242424242')
+		->setCardExperation('01', '16')
+		->setCardCvc('000')
+		->setMetadata([
+			'my_client_id'   => '123456',
+			'something_else' => 'more info about the customer',
+		])
+		->setDescription('A test Stripe charge!')
+		->setCapture(false)
+		->setStatementDescription('TEST CHARGE')
+		->setReceiptEmail('someone@somwhere.com')
+		->charge()
+	;
+} catch(\Scribe\StripeBundle\Exception\StripeException $e) {
+	// handle exception
+}
+
+$response = $charge->getResponse();
+```
+
 ## License
 
 Please see the LICENSE file distributed with this software.
