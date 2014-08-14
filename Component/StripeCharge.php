@@ -53,6 +53,41 @@ class StripeCharge extends Stripe
     private $charge_card_cvc = null;
 
     /**
+     * @var string|null
+     */
+    private $charge_name = null;
+
+    /**
+     * @var string|null
+     */
+    private $charge_address_line_01 = null;
+
+    /**
+     * @var string|null
+     */
+    private $charge_address_line_02 = null;
+
+    /**
+     * @var string|null
+     */
+    private $charge_city = null;
+
+    /**
+     * @var string|null
+     */
+    private $charge_state = null;
+
+    /**
+     * @var string|int|null
+     */
+    private $charge_zip = null;
+
+    /**
+     * @var string|null
+     */
+    private $charge_country = null;
+
+    /**
      * @var array
      */
     private $charge_metadata = [];
@@ -65,7 +100,7 @@ class StripeCharge extends Stripe
     /**
      * @var bool
      */
-    private $charge_capture = true;
+    private $charge_capture = 'true';
 
     /**
      * @var string|null
@@ -105,8 +140,20 @@ class StripeCharge extends Stripe
      * @param  int|null
      * @return StripeCharge
      */
-    public function setAmount($amount = null)
+    public function setAmount($dollars = null, $cents = null)
     {
+        if ($dollars === null && $cents === null) {
+            $this->charge_amount = null;
+        }
+
+        if ($dollars !== null) {
+            $amount = (int)$dollars * 100;
+        }
+
+        if ($cents !== null) {
+            $amount += $cents;
+        }
+
         $this->charge_amount = $amount;
 
         return $this;
@@ -162,6 +209,83 @@ class StripeCharge extends Stripe
     }
 
     /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setName($name = null)
+    {
+        $this->charge_name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setAddressLine01($address = null)
+    {
+        $this->charge_address_line_01 = $address;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setAddressLine02($address = null)
+    {
+        $this->charge_address_line_02 = $address;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setCity($city = null)
+    {
+        $this->charge_city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setState($state = null)
+    {
+        $this->charge_state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|int|null
+     * @return StripeCharge
+     */
+    public function setZip($zip = null)
+    {
+        $this->charge_zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * @param  string|null
+     * @return StripeCharge
+     */
+    public function setCountry($country = null)
+    {
+        $this->charge_country = $country;
+
+        return $this;
+    }
+
+    /**
      * @param  array
      * @return StripeCharge
      */
@@ -193,7 +317,7 @@ class StripeCharge extends Stripe
      */
     public function setCapture($capture = true)
     {
-        $this->charge_capture = (bool)$capture;
+        $this->charge_capture = $capture === true ? 'true' : 'false';
 
         return $this;
     }
@@ -242,7 +366,7 @@ class StripeCharge extends Stripe
     public function charge() 
     {
         if ($this->charge_amount === null || $this->charge_card_number === null || 
-            $this->charge_card_experation_month === null || $this->charge_card_experation_year ||
+            $this->charge_card_experation_month === null || $this->charge_card_experation_year === null ||
             $this->charge_card_cvc === null) 
         {
             throw new StripeException('The following fields are required: amount, card_number, card_experation_month, card_experation_year, card_cvc.');
@@ -259,6 +383,34 @@ class StripeCharge extends Stripe
                 'cvc'       => $this->charge_card_cvc,
             ],
         ];
+
+        if ($this->charge_name !== null) {
+            $data['card']['name'] = $this->charge_name;
+        }
+
+        if ($this->charge_address_line_01 !== null) {
+            $data['card']['address_line1'] = $this->charge_address_line_01;
+        }
+
+        if ($this->charge_address_line_02 !== null) {
+            $data['card']['address_line2'] = $this->charge_address_line_02;
+        }
+
+        if ($this->charge_city !== null) {
+            $data['card']['address_city'] = $this->charge_city;
+        }
+
+        if ($this->charge_state !== null) {
+            $data['card']['address_state'] = $this->charge_state;
+        }
+
+        if ($this->charge_zip !== null) {
+            $data['card']['address_zip'] = $this->charge_zip;
+        }
+
+        if ($this->charge_country !== null) {
+            $data['card']['address_country'] = $this->charge_country;
+        }
 
         if ($this->charge_description !== null) {
             $data['description'] = $this->charge_description;

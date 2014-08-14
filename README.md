@@ -47,15 +47,15 @@ scribe_stripe:
 Minimal usage:
 
 ```php
-$charge = new \Scribe\StripeBundle\Component\StripeCharge();
+$charge = $container->get('scribe.stripe.charge');
 
 try {
 	$charge
-		->setAmount('10.00')
+		->setAmount(10, 00)
 		->setCardNumber('4242424242424242')
-		->setCardExperation('01', '16')
+		->setCardExperation(01, 16)
 		->setCardCvc('000')
-		->run()
+		->charge()
 	;
 } catch(\Scribe\StripeBundle\Exception\StripeException $e) {
 	// handle exception
@@ -67,26 +67,32 @@ $response = $charge->getResponse();
 You can also use a collection of other fields (https://stripe.com/docs/api/php#create_charge) to pass additional data to Stripe.
 
 ```php
-$charge = new \Scribe\StripeBundle\StripeCharge();
+$charge = $container->get('scribe.stripe.charge');
 
 try {
-	$charge
-		->setAmount('10.00')
-		->setCardNumber('4242424242424242')
-		->setCardExperation('01', '16')
-		->setCardCvc('000')
-		->setMetadata([
-			'my_client_id'   => '123456',
-			'something_else' => 'more info about the customer',
-		])
-		->setDescription('A test Stripe charge!')
-		->setCapture(false)
-		->setStatementDescription('TEST CHARGE')
-		->setReceiptEmail('someone@somwhere.com')
-		->charge()
-	;
+    $charge
+        ->setAmount(10, 20)
+        ->setCardNumber('4242424242424242')
+        ->setCardExperation(1, 2016)
+        ->setCardCvc('000')
+        ->setName('First Last')
+        ->setAddressLine01('123 Address Ln.')
+        ->setAddressLine02('Suite 666')
+        ->setCity('City')
+        ->setState('State')
+        ->setZip('12345')
+        ->setCountry('USA')
+        ->setMetadata([
+            'my_client_id'   => '123456',
+            'something_else' => 'more info about the customer',
+        ])
+        ->setDescription('A test Stripe charge!')
+        ->setStatementDescription('TEST CHARGE')
+        ->setReceiptEmail('someone@somwhere.com')
+        ->charge()
+    ;
 } catch(\Scribe\StripeBundle\Exception\StripeException $e) {
-	// handle exception
+    // handle exception
 }
 
 $response = $charge->getResponse();
