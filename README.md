@@ -46,7 +46,7 @@ scribe_stripe:
 
 Minimal usage:
 
-```
+```php
 $charge = new \Scribe\StripeBundle\Component\StripeCharge();
 
 try {
@@ -66,7 +66,7 @@ $response = $charge->getResponse();
 
 You can also use a collection of other fields (https://stripe.com/docs/api/php#create_charge) to pass additional data to Stripe.
 
-```
+```php
 $charge = new \Scribe\StripeBundle\StripeCharge();
 
 try {
