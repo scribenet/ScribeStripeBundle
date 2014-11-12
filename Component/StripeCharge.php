@@ -176,7 +176,7 @@ class StripeCharge extends Stripe
      */
     public function setCardNumber($card_number = null)
     {
-        if ($card_number !== null && (strlen($card_number) !== 15 || strlen($card_number) !== 16)) {
+        if ($card_number !== null && strlen($card_number) !== 15 && strlen($card_number) !== 16) {
             throw new StripeException('Credit card number must be null or 15 digits (for American Express) or 16 digits (for all other cards).');
         }
 
