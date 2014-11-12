@@ -176,8 +176,8 @@ class StripeCharge extends Stripe
      */
     public function setCardNumber($card_number = null)
     {
-        if ($card_number !== null && strlen($card_number) !== 16) {
-            throw new StripeException('Credit card number must be null or 16 digits.');
+        if ($card_number !== null && (strlen($card_number) !== 15 || strlen($card_number) !== 16)) {
+            throw new StripeException('Credit card number must be null or 15 digits (for American Express) or 16 digits (for all other cards).');
         }
 
         $this->charge_card_number = $card_number;
@@ -363,11 +363,11 @@ class StripeCharge extends Stripe
     /**
      * @return array
      */
-    public function charge() 
+    public function charge()
     {
-        if ($this->charge_amount === null || $this->charge_card_number === null || 
+        if ($this->charge_amount === null || $this->charge_card_number === null ||
             $this->charge_card_experation_month === null || $this->charge_card_experation_year === null ||
-            $this->charge_card_cvc === null) 
+            $this->charge_card_cvc === null)
         {
             throw new StripeException('The following fields are required: amount, card_number, card_experation_month, card_experation_year, card_cvc.');
         }
@@ -429,8 +429,8 @@ class StripeCharge extends Stripe
         }
 
         $this->charge_response = $this->request(
-            Stripe::API_METHOD_CHARGES, 
-            Stripe::API_REQUEST_POST, 
+            Stripe::API_METHOD_CHARGES,
+            Stripe::API_REQUEST_POST,
             $data
         );
 
@@ -447,8 +447,8 @@ class StripeCharge extends Stripe
         }
 
         $this->charge_response = $this->request(
-            Stripe::API_METHOD_CHARGES, 
-            Stripe::API_REQUEST_GET, 
+            Stripe::API_METHOD_CHARGES,
+            Stripe::API_REQUEST_GET,
             [],
             $this->charge_id
         );
@@ -476,8 +476,8 @@ class StripeCharge extends Stripe
         }
 
         $this->charge_response = $this->request(
-            Stripe::API_METHOD_CHARGES, 
-            Stripe::API_REQUEST_POST, 
+            Stripe::API_METHOD_CHARGES,
+            Stripe::API_REQUEST_POST,
             $data,
             $this->charge_id
         );
